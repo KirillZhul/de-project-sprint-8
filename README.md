@@ -38,7 +38,7 @@
 
 ### Схемы:
 
-1) Входная таблица данных для проекта (subscribers_restaurants) и пример входного сообщения:
+1) DDL входной таблицы данных для проекта (subscribers_restaurants) и пример входного сообщения:
 ~~~
 -- DROP TABLE public.subscribers_restaurants;
 
@@ -64,7 +64,7 @@ id|client_id                           |restaurant_id                       |
 10|023e4567-e89b-12d3-a456-426614174000|123e4567-e89b-12d3-a456-426614174000|
 ~~~
 
-2) Финальная таблица данных для проекта (subscribers_feedback) и пример входного сообщения:
+2) DDL финальной таблицы данных для проекта (subscribers_feedback) и пример входного сообщения:
 ~~~
    -- Выходная таблица
    -- DROP TABLE public.subscribers_feedback;
