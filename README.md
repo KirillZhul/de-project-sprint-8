@@ -39,9 +39,32 @@
 ### Схемы:
 
 1) Входная таблица данных для проекта (subscribers_restaurants) и пример входного сообщения:
+~~~
+-- DROP TABLE public.subscribers_restaurants;
 
+CREATE TABLE public.subscribers_restaurants (
+    id serial4 NOT NULL,
+    client_id varchar NOT NULL,
+    restaurant_id varchar NOT NULL,
+    CONSTRAINT pk_id PRIMARY KEY (id)
+);
 
-1) Финальная таблица данных для проекта (subscribers_feedback) и пример входного сообщения:
+-- Пример заполненных данных
+id|client_id                           |restaurant_id                       |
+--+------------------------------------+------------------------------------+
+ 1|223e4567-e89b-12d3-a456-426614174000|123e4567-e89b-12d3-a456-426614174000|
+ 2|323e4567-e89b-12d3-a456-426614174000|123e4567-e89b-12d3-a456-426614174000|
+ 3|423e4567-e89b-12d3-a456-426614174000|123e4567-e89b-12d3-a456-426614174000|
+ 4|523e4567-e89b-12d3-a456-426614174000|123e4567-e89b-12d3-a456-426614174000|
+ 5|623e4567-e89b-12d3-a456-426614174000|123e4567-e89b-12d3-a456-426614174000|
+ 6|723e4567-e89b-12d3-a456-426614174000|123e4567-e89b-12d3-a456-426614174000|
+ 7|823e4567-e89b-12d3-a456-426614174000|123e4567-e89b-12d3-a456-426614174000|
+ 8|923e4567-e89b-12d3-a456-426614174000|123e4567-e89b-12d3-a456-426614174001|
+ 9|923e4567-e89b-12d3-a456-426614174000|123e4567-e89b-12d3-a456-426614174001|
+10|023e4567-e89b-12d3-a456-426614174000|123e4567-e89b-12d3-a456-426614174000|
+~~~
+
+2) Финальная таблица данных для проекта (subscribers_feedback) и пример входного сообщения:
 ~~~
    -- Выходная таблица
    -- DROP TABLE public.subscribers_feedback;
@@ -75,3 +98,28 @@ id|restaurant_id                       |adv_campaign_id                     |adv
  8|123e4567-e89b-12d3-a456-426614174000|123e4567-e89b-12d3-a456-426614174003|first campaign      |Ivanov Ivan Ivanovich|iiivanov@restaurant.ru    |                 1659203516|               2659207116|      1659131516|023e4567-e89b-12d3-a456-426614174000|              1659304828|        |
 ~~~
  
+### Команды
+```
+# write topic
+kafkacat -b rc1b-2erh7b35n4j4v869.mdb.yandexcloud.net:9091 \
+-X security.protocol=SASL_SSL \
+-X sasl.mechanisms=SCRAM-SHA-512 \
+-X sasl.username="de-student" \
+-X sasl.password="ltcneltyn" \
+-X ssl.ca.location=/.ssh/CA.pem \
+-t student.topic.cohort15.kirillzhul.in \
+-K: \
+-P
+first_message:{"restaurant_id": "123e4567-e89b-12d3-a456-426614174000","adv_campaign_id": "123e4567-e89b-12d3-a456-426614174003","adv_campaign_content": "first campaign","adv_campaign_owner": "Ivanov Ivan Ivanovich","adv_campaign_owner_contact": "iiivanov@restaurant.ru","adv_campaign_datetime_start": 1678615562,"adv_campaign_datetime_end": 2659207116,"datetime_created": 1678879362}
+
+# read topic
+kafkacat -b rc1b-2erh7b35n4j4v869.mdb.yandexcloud.net:9091 \
+-X security.protocol=SASL_SSL \
+-X sasl.mechanisms=SCRAM-SHA-512 \
+-X sasl.username="de-student" \
+-X sasl.password="ltcneltyn" \
+-X ssl.ca.location=/.ssh/CA.pem \
+-t student.topic.cohort15.kirillzhul.out \
+-C \
+-o beginning
+```
