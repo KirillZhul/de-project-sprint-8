@@ -43,7 +43,7 @@
 
 1) Финальная таблица данных для проекта (subscribers_feedback) и пример входного сообщения:
 
-   -- Выходная таблица
+*   -- Выходная таблица
    -- DROP TABLE public.subscribers_feedback;
 
     CREATE TABLE public.subscribers_feedback (
@@ -61,7 +61,7 @@
         feedback varchar NULL,
         CONSTRAINT id_pk PRIMARY KEY (id)
    );
-
+*
 -- Пример заполненных данных
 id|restaurant_id                       |adv_campaign_id                     |adv_campaign_content|adv_campaign_owner   |adv_campaign_owner_contact|adv_campaign_datetime_start|adv_campaign_datetime_end|datetime_created|client_id                           |trigger_datetime_created|feedback|
 --+------------------------------------+------------------------------------+--------------------+---------------------+--------------------------+---------------------------+-------------------------+----------------+------------------------------------+------------------------+--------+
