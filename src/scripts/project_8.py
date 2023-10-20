@@ -1,44 +1,9 @@
 import os
-
 from datetime import datetime
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 from pyspark.sql.types import StructType, StructField, StringType, LongType
-
-
-kafka_security_options = {
-    'kafka.security.protocol': 'SASL_SSL',
-    'kafka.sasl.mechanism': 'SCRAM-SHA-512',
-    'kafka.sasl.jaas.config': f'org.apache.kafka.common.security.scram.ScramLoginModule required username=\"de-student\" password=\"ltcneltyn\";',
-    'kafka.bootstrap.servers': 'rc1b-2erh7b35n4j4v869.mdb.yandexcloud.net:9091',
-}
-
-docker_postgresql_settings = {
-    'user': 'jovyan',
-    'password': 'jovyan',
-    'url': f'jdbc:postgresql://localhost:5432/postgres',
-    'driver': 'org.postgresql.Driver',
-    'dbtable': 'public.create_subscribers_feedback',
-}
-
-postgresql_settings = {
-    'user': 'student',
-    'password': 'de-student',
-    'url': f'jdbc:postgresql://rc1a-fswjkpli01zafgjm.mdb.yandexcloud.net:6432/de',
-    'driver': 'org.postgresql.Driver',
-    'dbtable': 'subscribers_restaurants',
-}
-
-# необходимые библиотеки для интеграции Spark с Kafka и PostgreSQL
-spark_jars_packages = ",".join(
-    [
-        "org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0",
-        "org.postgresql:postgresql:42.4.0",
-    ]
-)
-
-TOPIC_NAME_IN = 'student.topic.cohort15.kirillzhul_in'
-TOPIC_NAME_OUT = 'student.topic.cohort15.kirillzhul_out'
+from config_file import kafka_security_options, docker_postgresql_settings, postgresql_settings, spark_jars_packages, TOPIC_IN, TOPIC_OUT
 
 # текущее время в миллисекундах
 current_timestamp_utc = int(round(datetime.utcnow().timestamp()))
@@ -64,7 +29,7 @@ def foreach_batch_function(df):
     df_to_stream.write \
         .format('kafka') \
         .options(**kafka_security_options) \
-        .option('topic', TOPIC_NAME_OUT) \
+        .option('topic', TOPIC_OUT) \
         .option('truncate', False) \
         .save()
 
@@ -80,12 +45,11 @@ def spark_init(Spark_Session_Name) -> SparkSession:
         .getOrCreate()
         )
 
-
 def restaurant_read_stream(spark):
     df = spark.readStream \
         .format('kafka') \
         .options(**kafka_security_options) \
-        .option('subscribe', TOPIC_NAME_IN) \
+        .option('subscribe', TOPIC_IN) \
         .load()
 
     df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)") \
